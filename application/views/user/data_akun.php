@@ -8,7 +8,7 @@
         <!-- Form -->
         <form class="navbar-search navbar-search-dark form-inline mr-3 d-none d-md-flex ml-lg-auto">
           <div class="form-group mb-0">
-            
+
           </div>
         </form>
         <!-- User -->
@@ -37,7 +37,7 @@
     <!-- Header -->
     <div class="header bg-gradient-warning pb-8 pt-5 pt-md-8">
       <div class="container-fluid">
-        <div class="header-body">    
+        <div class="header-body">
         </div>
       </div>
     </div>
@@ -45,7 +45,7 @@
     <div class="container-fluid mt--7">
       <div class="row">
         <div class="col-xl-8 mb-5 mb-xl-0">
-               
+
         </div>
       </div>
       <div class="row mt-5">
@@ -74,31 +74,31 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <?php 
-                    $no = 1;
-                    foreach($dataAkun as $row): 
+                  <?php
+                  $no = 1;
+                  foreach ($dataAkun as $row) :
                   ?>
-                  <tr>
-                    <td>
-                      <?= $no++ ?>
-                    </td>
-                    <td>
-                      <?= $row->no_reff ?>
-                    </td>
-                    <td>
-                    <?= $row->nama_reff ?>
-                    </td>
-                    <td>
-                    <?= $row->keterangan ?>
-                    </td>
-                    <td class="d-flex justify-content-center">
-                        <a href="<?= base_url('data_akun/edit/'.$row->no_reff) ?>" class="btn btn-warning mb-4">Edit</a>
-                        <?= form_open('data_akun/hapus',['class'=>'form'],['id'=>$row->no_reff]) ?>
-                        <?= form_button(['type'=>'submit','content'=>'Hapus','class'=>'btn btn-danger hapus']) ?>
+                    <tr>
+                      <td>
+                        <?= $no++ ?>
+                      </td>
+                      <td>
+                        <?= $row->no_reff ?>
+                      </td>
+                      <td>
+                        <?= $row->nama_reff ?>
+                      </td>
+                      <td>
+                        <?= $row->keterangan ?>
+                      </td>
+                      <td class="d-flex justify-content-center">
+                        <!-- <a href="<?= base_url('data_akun/edit/' . $row->no_reff) ?>" class="btn btn-warning mb-4">Edit</a> -->
+                        <?= form_open('data_akun/hapus', ['class' => 'form'], ['id' => $row->no_reff]) ?>
+                        <?= form_button(['type' => 'submit', 'content' => 'Hapus', 'class' => 'btn btn-danger hapus']) ?>
                         <?= form_close() ?>
-                    </td>
-                  </tr> 
-                  <?php endforeach; ?>                 
+                      </td>
+                    </tr>
+                  <?php endforeach; ?>
                 </tbody>
               </table>
             </div>

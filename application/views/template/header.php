@@ -32,10 +32,8 @@
     <ul class="nav align-items-center d-md-none">
       <li class="nav-item dropdown">
         <a class="nav-link nav-link-icon" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-
         </a>
         <div class="dropdown-menu dropdown-menu-arrow dropdown-menu-right" aria-labelledby="navbar-default_dropdown_1">
-
         </div>
       </li>
       <li class="nav-item dropdown">
@@ -61,7 +59,7 @@
         <div class="row">
           <div class="col-6 collapse-brand">
             <a href="<?= base_url('dashboard') ?>">
-              <img src="<?= base_url('assets/img/brand/blue.png') ?>">
+              <img src="<?= base_url('assets/img/brand/logo.jpeg') ?>">
             </a>
           </div>
           <div class="col-6 collapse-close">

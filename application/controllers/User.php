@@ -101,33 +101,33 @@ class User extends CI_Controller
         // }
     }
 
-    public function editAkun($no_reff = null)
-    {
-        // if ($this->session->userdata('role') != 'direktur') {
-        //     show_404();
-        // } else {
-        $title = 'Edit';
-        $titleTag = 'Data Akun';
-        $action = 'data_akun/edit/' . $no_reff;
-        $content = 'user/form_akun';
+    // public function editAkun($no_reff = null)
+    // {
+    //     // if ($this->session->userdata('role') != 'direktur') {
+    //     //     show_404();
+    //     // } else {
+    //     $title = 'Edit';
+    //     $titleTag = 'Data Akun';
+    //     $action = 'data_akun/edit/' . $no_reff;
+    //     $content = 'user/form_akun';
 
-        if (!$_POST) {
-            $data = (object) $this->akun->getAkunByNo($no_reff);
-        } else {
-            $data = (object) $this->input->post(null, true);
-            $data->id_user = $this->session->userdata('id');
-        }
+    //     if (!$_POST) {
+    //         $data = (object) $this->akun->getAkunByNo($no_reff);
+    //     } else {
+    //         $data = (object) $this->input->post(null, true);
+    //         $data->id_user = $this->session->userdata('id');
+    //     }
 
-        if (!$this->akun->validate()) {
-            $this->load->view('template', compact('content', 'title', 'action', 'data', 'titleTag'));
-            return;
-        }
+    //     if (!$this->akun->validate()) {
+    //         $this->load->view('template', compact('content', 'title', 'action', 'data', 'titleTag'));
+    //         return;
+    //     }
 
-        $this->akun->updateAkun($no_reff, $data);
-        $this->session->set_flashdata('berhasil', 'Data Akun Berhasil Di Ubah');
-        redirect('data_akun');
-        // }
-    }
+    //     $this->akun->updateAkun($no_reff, $data);
+    //     $this->session->set_flashdata('berhasil', 'Data Akun Berhasil Di Ubah');
+    //     redirect('data_akun');
+    //     // }
+    // }
 
     public function deleteAkun()
     {
@@ -608,8 +608,8 @@ class User extends CI_Controller
             $bulan = $this->input->post('bulan', true);
             $tahun = $this->input->post('tahun', true);
 
-            $dataAkunP = $this->akun->getAkunByMonthYearP($bulan, $tahun);
-            $dataAkunB = $this->akun->getAkunByMonthYearB($bulan, $tahun);
+            $dataAkunP = $this->akun->getAkunByMonthYearLRP($bulan, $tahun);
+            $dataAkunB = $this->akun->getAkunByMonthYearLRB($bulan, $tahun);
 
             foreach ($dataAkunP as $row) {
                 $dataP[] = (array) $this->jurnal->getJurnalByNoReffMonthYearP($row->no_reff, $bulan, $tahun);
@@ -658,20 +658,34 @@ class User extends CI_Controller
             $debitB = 0;
             $kreditP = 0;
             $kreditB = 0;
+            $j = 0;
+            $debP = [];
+            $debB = [];
 
             for ($i = 0; $i < $jumlahP; $i++) {
                 $s = 0;
-                $deb = $saldoP[$i];
-                $sheet->setCellValue('A' . $x, $dataP[$i][$s]->nama_reff);
-                for ($j = 0; $j < count($dataP[$i]); $j++) {
-                    $kreditP = $kreditP + $deb[$j]->saldo;
-                    $hasilP = $kreditP - $debitP;
+                $debP = $saldoP[$i];
+                for ($k = 0; $k < $jumlahP; $k++) {
+                    if ($j != $k) {
+                        if ($debP == $saldoP[$k]) {
+                            $saldoP[$k] = "";
+                        }
+                    }
                 }
-                $sheet->setCellValue('C' . $x, $hasilP);
-                $totalP += $hasilP;
-                $debitP = 0;
-                $kreditP = 0;
-                $x++;
+                if ($debP != "") {
+                    $sheet->setCellValue('A' . $x, $dataP[$i][$s]->nama_reff);
+                    for ($j = 0; $j < count($dataP[$i]); $j++) {
+                        if ($debP[$j] != "") {
+                            $kreditP = $kreditP + $debP[$j]->saldo;
+                            $hasilP = $kreditP - $debitP;
+                        }
+                    }
+                    $sheet->setCellValue('C' . $x, $hasilP);
+                    $totalP += $hasilP;
+                    $debitP = 0;
+                    $kreditP = 0;
+                    $x++;
+                }
             }
             $x--;
 
@@ -709,17 +723,28 @@ class User extends CI_Controller
 
             for ($i = 0; $i < $jumlahB; $i++) {
                 $s = 0;
-                $deb = $saldoB[$i];
-                $sheet->setCellValue('A' . $x, $dataB[$i][$s]->nama_reff);
-                for ($j = 0; $j < count($dataB[$i]); $j++) {
-                    $kreditB = $kreditB + $deb[$j]->saldo;
-                    $hasilB = $kreditB - $debitB;
+                $debB = $saldoB[$i];
+                for ($k = 0; $k < $jumlahB; $k++) {
+                    if ($j != $k) {
+                        if ($debB == $saldoB[$k]) {
+                            $saldoB[$k] = "";
+                        }
+                    }
                 }
-                $sheet->setCellValue('C' . $x, $hasilB);
-                $totalB += $hasilB;
-                $debitB = 0;
-                $kreditB = 0;
-                $x++;
+                if ($debB != "") {
+                    $sheet->setCellValue('A' . $x, $dataB[$i][$s]->nama_reff);
+                    for ($j = 0; $j < count($dataB[$i]); $j++) {
+                        if ($debB[$j] != "") {
+                            $kreditB = $kreditB + $debB[$j]->saldo;
+                            $hasilB = $kreditB - $debitB;
+                        }
+                    }
+                    $sheet->setCellValue('C' . $x, $hasilB);
+                    $totalB += $hasilB;
+                    $debitB = 0;
+                    $kreditB = 0;
+                    $x++;
+                }
             }
 
             $x--;
@@ -803,22 +828,26 @@ class User extends CI_Controller
             }
 
             $dataAkunM = $this->akun->getAkunByMonthYearM($bulan, $tahun);
-            $dataAkunP = $this->akun->getAkunByMonthYearP($bulan, $tahun);
+            $dataAkunLR = $this->akun->getAkunByMonthYearLR($bulan, $tahun);
             $dataAkunPr = $this->akun->getAkunByMonthYearPr($bulan, $tahun);
-            $dataAkunB = $this->akun->getAkunByMonthYearB($bulan, $tahun);
-            $dataM = null;
-            $dataP = null;
-            $dataPr = null;
-            $dataB = null;
-            $saldoM = null;
-            $saldoP = null;
-            $saldoPr = null;
-            $saldoB = null;
+            // $dataAkunP = $this->akun->getAkunByMonthYearP($bulan, $tahun);
+            // $dataAkunB = $this->akun->getAkunByMonthYearB($bulan, $tahun);
             $hasil = null;
+            $dataM = null;
+            $dataLR = null;
+            $dataPr = null;
+            $saldoM = null;
+            $saldoLR = null;
+            $saldoPr = null;
             $totalM = null;
-            $totalP = null;
+            $totalLR = null;
             $totalPr = null;
-            $totalB = null;
+            // $dataP = null;
+            // $dataB = null;
+            // $saldoP = null;
+            // $saldoB = null;
+            // $totalP = null;
+            // $totalB = null;
             $s = null;
 
             foreach ($dataAkunM as $row) {
@@ -826,9 +855,9 @@ class User extends CI_Controller
                 $saldoM[] = (array) $this->jurnal->getJurnalByNoReffSaldoMonthYearM($row->no_reff, $bulan, $tahun);
             }
 
-            foreach ($dataAkunP as $row) {
-                $dataP[] = (array) $this->jurnal->getJurnalByNoReffMonthYearP($row->no_reff, $bulan, $tahun);
-                $saldoP[] = (array) $this->jurnal->getJurnalByNoReffSaldoMonthYearP($row->no_reff, $bulan, $tahun);
+            foreach ($dataAkunLR as $row) {
+                $dataLR[] = (array) $this->jurnal->getJurnalByNoReffMonthYearLR($row->no_reff, $bulan, $tahun);
+                $saldoLR[] = (array) $this->jurnal->getJurnalByNoReffSaldoMonthYearLR($row->no_reff, $bulan, $tahun);
             }
 
             foreach ($dataAkunPr as $row) {
@@ -836,22 +865,22 @@ class User extends CI_Controller
                 $saldoPr[] = (array) $this->jurnal->getJurnalByNoReffSaldoMonthYearPr($row->no_reff, $bulan, $tahun);
             }
 
-            foreach ($dataAkunB as $row) {
-                $dataB[] = (array) $this->jurnal->getJurnalByNoReffMonthYearB($row->no_reff, $bulan, $tahun);
-                $saldoB[] = (array) $this->jurnal->getJurnalByNoReffSaldoMonthYearB($row->no_reff, $bulan, $tahun);
-            }
+            // foreach ($dataAkunB as $row) {
+            //     $dataB[] = (array) $this->jurnal->getJurnalByNoReffMonthYearB($row->no_reff, $bulan, $tahun);
+            //     $saldoB[] = (array) $this->jurnal->getJurnalByNoReffSaldoMonthYearB($row->no_reff, $bulan, $tahun);
+            // }
 
-            if ($dataP == null || $saldoP == null || $dataPr == null || $saldoPr == null || $saldoB == null || $dataB == null || $saldoM == null || $dataM == null) {
+            if ($dataM == null || $saldoM == null || $dataLR == null || $saldoLR == null || $saldoPr == null || $dataPr == null) {
                 $this->session->set_flashdata('dataNull', 'Laporan Perubahan Modal Dengan Bulan ' . bulan($bulan) . ' Pada Tahun ' . $tahun . ' Tidak Di Temukan');
                 redirect('laporan_keuangan/perubahanModal');
             }
 
             $jumlahM = count($dataM);
-            $jumlahP = count($dataP);
+            $jumlahLR = count($dataLR);
             $jumlahPr = count($dataPr);
-            $jumlahB = count($dataB);
+            // $jumlahB = count($dataB);
 
-            $this->load->view('template', compact('content', 'titleTag', 'dataAkunM', 'dataAkunP', 'dataAkunPr', 'dataAkunB', 'dataM', 'dataP', 'dataPr', 'dataB', 'jumlahM', 'jumlahP', 'jumlahPr', 'jumlahB', 'saldoM', 'saldoP', 'saldoPr', 'saldoB', 'hasil', 'totalM', 'totalP', 'totalPr', 'totalB', 's', 'bulan', 'tahun'));
+            $this->load->view('template', compact('content', 'titleTag', 'dataAkunM', 'dataAkunLR', 'dataAkunPr', 'dataM', 'dataLR', 'dataPr', 'jumlahM', 'jumlahLR', 'jumlahPr', 'saldoM', 'saldoLR', 'saldoPr', 'hasil', 'totalM', 'totalLR', 'totalPr', 's', 'bulan', 'tahun'));
         }
     }
 
@@ -1225,48 +1254,48 @@ class User extends CI_Controller
         $writer->save('php://output');
     }
 
-    public function laporan()
-    {
-        $titleTag = 'Laporan';
-        $content = 'user/laporan_main';
-        $listJurnal = $this->jurnal->getJurnalByYearAndMonth();
-        $tahun = $this->jurnal->getJurnalByYear();
-        $this->load->view('template', compact('content', 'listJurnal', 'titleTag', 'tahun'));
-    }
+    // public function laporan()
+    // {
+    //     $titleTag = 'Laporan';
+    //     $content = 'user/laporan_main';
+    //     $listJurnal = $this->jurnal->getJurnalByYearAndMonth();
+    //     $tahun = $this->jurnal->getJurnalByYear();
+    //     $this->load->view('template', compact('content', 'listJurnal', 'titleTag', 'tahun'));
+    // }
 
-    public function laporanCetak()
-    {
-        $bulan = $this->input->post('bulan', true);
-        $tahun = $this->input->post('tahun', true);
-        $titleTag = 'Laporan ' . bulan($bulan) . ' ' . $tahun;
+    // public function laporanCetak()
+    // {
+    //     $bulan = $this->input->post('bulan', true);
+    //     $tahun = $this->input->post('tahun', true);
+    //     $titleTag = 'Laporan ' . bulan($bulan) . ' ' . $tahun;
 
-        $dataAkun = $this->akun->getAkunByMonthYear($bulan, $tahun);
-        var_dump($dataAkun);
-        die;
+    //     $dataAkun = $this->akun->getAkunByMonthYear($bulan, $tahun);
+    //     var_dump($dataAkun);
+    //     die;
 
-        $jurnals = $this->jurnal->getJurnalJoinAkunDetail($bulan, $tahun);
-        $totalDebit = $this->jurnal->getTotalSaldoDetail('debit', $bulan, $tahun);
-        $totalKredit = $this->jurnal->getTotalSaldoDetail('kredit', $bulan, $tahun);
+    //     $jurnals = $this->jurnal->getJurnalJoinAkunDetail($bulan, $tahun);
+    //     $totalDebit = $this->jurnal->getTotalSaldoDetail('debit', $bulan, $tahun);
+    //     $totalKredit = $this->jurnal->getTotalSaldoDetail('kredit', $bulan, $tahun);
 
-        $data = null;
-        $saldo = null;
-        foreach ($dataAkun as $row) {
-            $data[] = (array) $this->jurnal->getJurnalByNoReffMonthYear($row->no_reff, $bulan, $tahun);
-            $saldo[] = (array) $this->jurnal->getJurnalByNoReffSaldoMonthYear($row->no_reff, $bulan, $tahun);
-        }
+    //     $data = null;
+    //     $saldo = null;
+    //     foreach ($dataAkun as $row) {
+    //         $data[] = (array) $this->jurnal->getJurnalByNoReffMonthYear($row->no_reff, $bulan, $tahun);
+    //         $saldo[] = (array) $this->jurnal->getJurnalByNoReffSaldoMonthYear($row->no_reff, $bulan, $tahun);
+    //     }
 
-        if ($data == null || $saldo == null) {
-            $this->session->set_flashdata('dataNull', 'Laporan Dengan Bulan ' . bulan($bulan) . ' Pada Tahun ' . $tahun . ' Tidak Di Temukan');
-            redirect('laporan');
-        }
+    //     if ($data == null || $saldo == null) {
+    //         $this->session->set_flashdata('dataNull', 'Laporan Dengan Bulan ' . bulan($bulan) . ' Pada Tahun ' . $tahun . ' Tidak Di Temukan');
+    //         redirect('laporan');
+    //     }
 
-        $jumlah = count($data);
+    //     $jumlah = count($data);
 
-        // $this->load->library('pdf');
-        // $this->pdf->setPaper('A4', 'landscape');
-        // $this->pdf->filename = "laporan_".bulan($bulan).'_'.$tahun;
-        // $this->pdf->load_view('user/laporan', $data);
-    }
+    //     // $this->load->library('pdf');
+    //     // $this->pdf->setPaper('A4', 'landscape');
+    //     // $this->pdf->filename = "laporan_".bulan($bulan).'_'.$tahun;
+    //     // $this->pdf->load_view('user/laporan', $data);
+    // }
 
     public function logout()
     {
