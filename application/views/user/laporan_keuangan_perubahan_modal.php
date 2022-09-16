@@ -52,6 +52,99 @@
                 </div>
               </div>
             </div>
+
+
+            <div class="table-responsive" hidden>
+              <?php
+              $a = 0;
+              $debit = 0;
+              $kredit = 0;
+              $debLR = [];
+              $j = 0;
+              ?>
+              <!-- Projects table -->
+              <table class="table align-items-center table-flush">
+                <thead class="thead-light">
+                  <tr>
+                    <th scope="col">No. Akun</th>
+                    <th scope="col">Nama Akun</th>
+                    <th scope="col">Debit</th>
+                    <th scope="col">Kredit</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <?php
+                  $totalDebit = 0;
+                  $totalKredit = 0;
+
+                  for ($i = 0; $i < $jumlahLR; $i++) :
+                    $a++;
+                    $s = 0;
+                    $debLR = $saldoLR[$i];
+                    for ($k = 0; $k < $jumlahLR; $k++) {
+                      if ($j != $k) {
+                        if ($debLR == $saldoLR[$k]) {
+                          $saldoLR[$k] = "";
+                        }
+                      }
+                    }
+                  ?>
+                    <?php if ($debLR != "") : ?>
+                      <tr>
+                        <td>
+                          <?= $dataLR[$i][$s]->no_reff ?>
+                        </td>
+                        <td>
+                          <?= $dataLR[$i][$s]->nama_reff ?>
+                        </td>
+                        <?php
+                        for ($j = 0; $j < count($dataLR[$i]); $j++) :
+                          if ($debLR[$j] != "") {
+                            if ($debLR[$j]->jenis_saldo == "debit") {
+                              $debit = $debit + $debLR[$j]->saldo;
+                            } else {
+                              $kredit = $kredit + $debLR[$j]->saldo;
+                            }
+                            $hasilLR = $debit - $kredit;
+                          }
+                        endfor
+                        ?>
+                        <?php
+                        if ($hasilLR >= 0) { ?>
+                          <td><?= 'Rp. ' . number_format($hasilLR, 0, ',', '.') ?></td>
+                          <td> - </td>
+                          <?php $totalDebit += $hasilLR; ?>
+                        <?php } else { ?>
+                          <td> - </td>
+                          <td><?= 'Rp. ' . number_format(abs($hasilLR), 0, ',', '.') ?></td>
+                          <?php $totalKredit += $hasilLR; ?>
+                        <?php } ?>
+                        <?php
+                        $debit = 0;
+                        $kredit = 0;
+                        ?>
+                      </tr>
+                    <?php endif ?>
+                  <?php endfor ?>
+                  <?php if ($totalDebit != abs($totalKredit)) { ?>
+                    <tr>
+                      <td class="text-center" colspan="2"><b>Total</b></td>
+                      <td class="text-danger"><?= 'Rp. ' . number_format($totalDebit, 0, ',', '.') ?></td>
+                      <td class="text-danger"><?= 'Rp. ' . number_format(abs($totalKredit), 0, ',', '.') ?></td>
+                    </tr>
+                    <?php $nilaiTotal = $totalDebit - abs($totalKredit) ?>
+                  <?php } else { ?>
+                    <tr>
+                      <td class="text-center" colspan="2"><b>Total</b></td>
+                      <td class="text-success"><?= 'Rp. ' . number_format($totalDebit, 0, ',', '.') ?></td>
+                      <td class="text-success"><?= 'Rp. ' . number_format(abs($totalKredit), 0, ',', '.') ?></td>
+                    </tr>
+                    <?php $nilaiTotal = $totalDebit - abs($totalKredit) ?>
+                  <?php } ?>
+                </tbody>
+              </table>
+            </div>
+
             <div class="table-responsive">
               <?php
               $a = 0;
@@ -81,93 +174,19 @@
                       <?php
                       for ($j = 0; $j < count($dataM[$i]); $j++) :
                         $kredit = $kredit + $deb[$j]->saldo;
-                        $hasil = $debit - $kredit;
+                        $hasilM = $debit - $kredit;
                       endfor
                       ?>
-                      <td class="text-right"><?= 'Rp. ' . number_format(abs($hasil), 0, ',', '.') ?></td>
-                      <?php $totalM += $hasil; ?>
+                      <td class="text-right"><?= 'Rp. ' . number_format(abs($hasilM), 0, ',', '.') ?></td>
+                      <?php $totalM += $hasilM; ?>
                       <?php
                       $debit = 0;
                       $kredit = 0;
                       ?>
                     </tr>
                   <?php endfor ?>
-
-                  <?php
-                  $totalDebit = 0;
-                  $totalKredit = 0;
-
-                  for ($i = 0; $i < $jumlahLR; $i++) :
-                    $a++;
-                    $s = 0;
-                    $deb = $saldoLR[$i];
-                    for ($k = 0; $k < $jumlahLR; $k++) {
-                      if ($j != $k) {
-                        if ($deb == $saldoLR[$k]) {
-                          $saldoLR[$k] = "";
-                        }
-                      }
-                    }
-                  ?>
-                    <?php if ($deb != "") : ?>
-                      <tr>
-                        <td>
-                          <?= $dataLR[$i][$s]->no_reff ?>
-                        </td>
-                        <td>
-                          <?= $dataLR[$i][$s]->nama_reff ?>
-                        </td>
-                        <?php
-                        for ($j = 0; $j < count($dataLR[$i]); $j++) :
-                          if ($deb[$j] != "") {
-                            if ($deb[$j]->jenis_saldo == "debit") {
-                              $debit = $debit + $deb[$j]->saldo;
-                            } else {
-                              $kredit = $kredit + $deb[$j]->saldo;
-                            }
-                            $hasil = $debit - $kredit;
-                          }
-                        endfor
-                        ?>
-                        <?php
-                        if ($hasil >= 0) { ?>
-                          <td><?= 'Rp. ' . number_format($hasil, 0, ',', '.') ?></td>
-                          <td> - </td>
-                          <?php $totalDebit += $hasil; ?>
-                        <?php } else { ?>
-                          <td> - </td>
-                          <td><?= 'Rp. ' . number_format(abs($hasil), 0, ',', '.') ?></td>
-                          <?php $totalKredit += $hasil; ?>
-                        <?php } ?>
-                        <?php
-                        $debit = 0;
-                        $kredit = 0;
-                        ?>
-                      </tr>
-                    <?php endif ?>
-                  <?php endfor ?>
-                  <?php if ($totalDebit != abs($totalKredit)) { ?>
-                    <tr>
-                      <td class="text-center" colspan="2"><b>Total</b></td>
-                      <td class="text-danger"><?= 'Rp. ' . number_format($totalDebit, 0, ',', '.') ?></td>
-                      <td class="text-danger"><?= 'Rp. ' . number_format(abs($totalKredit), 0, ',', '.') ?></td>
-                    </tr>
-                    <tr class="bg-danger text-center">
-                      <td colspan="6" class="text-white" style="font-weight:bolder;font-size:19px">TIDAK SEIMBANG</td>
-                    </tr>
-                  <?php } else { ?>
-                    <tr>
-                      <td class="text-center" colspan="2"><b>Total</b></td>
-                      <td class="text-success"><?= 'Rp. ' . number_format($totalDebit, 0, ',', '.') ?></td>
-                      <td class="text-success"><?= 'Rp. ' . number_format(abs($totalKredit), 0, ',', '.') ?></td>
-                    </tr>
-                    <tr class="bg-success text-center">
-                      <td colspan="6" class="text-white" style="font-weight:bolder;font-size:19px">SEIMBANG</td>
-                    </tr>
-                  <?php } ?>
                   <tr>
-                    <?php $nilaiTotal = $totalLR; ?>
-                    <td>Laba Setelah Pajak</td>
+                    <td>Laba Bersih bulan <?= bulan($bulan); ?></td>
                     <td class="text-right"><?= 'Rp. ' . number_format(abs($nilaiTotal), 0, ',', '.') ?></td>
                   </tr>
                   <tr>
@@ -188,11 +207,11 @@
                       <?php
                       for ($j = 0; $j < count($dataPr[$i]); $j++) :
                         $kredit = $kredit + $deb[$j]->saldo;
-                        $hasil = $debit - $kredit;
+                        $hasilPr = $debit - $kredit;
                       endfor
                       ?>
-                      <td class="text-right"><?= 'Rp. ' . number_format(abs($hasil), 0, ',', '.') ?></td>
-                      <?php $totalPr += $hasil; ?>
+                      <td class="text-right"><?= 'Rp. ' . number_format(abs($hasilPr), 0, ',', '.') ?></td>
+                      <?php $totalPr += $hasilPr; ?>
                       <?php
                       $debit = 0;
                       $kredit = 0;

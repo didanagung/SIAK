@@ -832,7 +832,9 @@ class User extends CI_Controller
             $dataAkunPr = $this->akun->getAkunByMonthYearPr($bulan, $tahun);
             // $dataAkunP = $this->akun->getAkunByMonthYearP($bulan, $tahun);
             // $dataAkunB = $this->akun->getAkunByMonthYearB($bulan, $tahun);
-            $hasil = null;
+            $hasilM = null;
+            $hasilLR = null;
+            $hasilPr = null;
             $dataM = null;
             $dataLR = null;
             $dataPr = null;
@@ -880,7 +882,7 @@ class User extends CI_Controller
             $jumlahPr = count($dataPr);
             // $jumlahB = count($dataB);
 
-            $this->load->view('template', compact('content', 'titleTag', 'dataAkunM', 'dataAkunLR', 'dataAkunPr', 'dataM', 'dataLR', 'dataPr', 'jumlahM', 'jumlahLR', 'jumlahPr', 'saldoM', 'saldoLR', 'saldoPr', 'hasil', 'totalM', 'totalLR', 'totalPr', 's', 'bulan', 'tahun'));
+            $this->load->view('template', compact('content', 'titleTag', 'dataAkunM', 'dataAkunLR', 'dataAkunPr', 'dataM', 'dataLR', 'dataPr', 'jumlahM', 'jumlahLR', 'jumlahPr', 'saldoM', 'saldoLR', 'saldoPr', 'hasilM', 'hasilLR', 'hasilPr', 'totalM', 'totalLR', 'totalPr', 's', 'bulan', 'tahun'));
         }
     }
 
