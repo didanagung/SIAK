@@ -830,8 +830,6 @@ class User extends CI_Controller
             $dataAkunM = $this->akun->getAkunByMonthYearM($bulan, $tahun);
             $dataAkunLR = $this->akun->getAkunByMonthYearLR($bulan, $tahun);
             $dataAkunPr = $this->akun->getAkunByMonthYearPr($bulan, $tahun);
-            // $dataAkunP = $this->akun->getAkunByMonthYearP($bulan, $tahun);
-            // $dataAkunB = $this->akun->getAkunByMonthYearB($bulan, $tahun);
             $hasilM = null;
             $hasilLR = null;
             $hasilPr = null;
@@ -844,12 +842,6 @@ class User extends CI_Controller
             $totalM = null;
             $totalLR = null;
             $totalPr = null;
-            // $dataP = null;
-            // $dataB = null;
-            // $saldoP = null;
-            // $saldoB = null;
-            // $totalP = null;
-            // $totalB = null;
             $s = null;
 
             foreach ($dataAkunM as $row) {
@@ -867,11 +859,6 @@ class User extends CI_Controller
                 $saldoPr[] = (array) $this->jurnal->getJurnalByNoReffSaldoMonthYearPr($row->no_reff, $bulan, $tahun);
             }
 
-            // foreach ($dataAkunB as $row) {
-            //     $dataB[] = (array) $this->jurnal->getJurnalByNoReffMonthYearB($row->no_reff, $bulan, $tahun);
-            //     $saldoB[] = (array) $this->jurnal->getJurnalByNoReffSaldoMonthYearB($row->no_reff, $bulan, $tahun);
-            // }
-
             if ($dataM == null || $saldoM == null || $dataLR == null || $saldoLR == null || $saldoPr == null || $dataPr == null) {
                 $this->session->set_flashdata('dataNull', 'Laporan Perubahan Modal Dengan Bulan ' . bulan($bulan) . ' Pada Tahun ' . $tahun . ' Tidak Di Temukan');
                 redirect('laporan_keuangan/perubahanModal');
@@ -880,7 +867,6 @@ class User extends CI_Controller
             $jumlahM = count($dataM);
             $jumlahLR = count($dataLR);
             $jumlahPr = count($dataPr);
-            // $jumlahB = count($dataB);
 
             $this->load->view('template', compact('content', 'titleTag', 'dataAkunM', 'dataAkunLR', 'dataAkunPr', 'dataM', 'dataLR', 'dataPr', 'jumlahM', 'jumlahLR', 'jumlahPr', 'saldoM', 'saldoLR', 'saldoPr', 'hasilM', 'hasilLR', 'hasilPr', 'totalM', 'totalLR', 'totalPr', 's', 'bulan', 'tahun'));
         }
@@ -1254,6 +1240,120 @@ class User extends CI_Controller
         header('Cache-Control: max-age=0');
 
         $writer->save('php://output');
+    }
+
+    public function laporanPosisiKeuangan()
+    {
+        if ($this->session->userdata('role') != 'direktur') {
+            show_404();
+        } else {
+            $titleTag = 'Laporan Keuangan';
+            $content = 'user/laporan_keuangan_posisi_keuangan_main';
+            $listJurnal = $this->jurnal->getJurnalByYearAndMonth();
+            $tahun = $this->jurnal->getJurnalByYear();
+            $this->load->view('template', compact('content', 'listJurnal', 'titleTag', 'tahun'));
+        }
+    }
+
+    public function laporanPosisiKeuanganDetail()
+    {
+        if ($this->session->userdata('role') != 'direktur') {
+            show_404();
+        } else {
+            $content = 'user/laporan_keuangan_posisi_keuangan';
+            $titleTag = 'Laporan Keuangan';
+
+            $bulan = $this->input->post('bulan', true);
+            $tahun = $this->input->post('tahun', true);
+
+            if (empty($bulan) || empty($tahun)) {
+                redirect('laporan_keuangan/posisiKeuangan');
+            }
+
+            $dataAkun = $this->akun->getAkunByMonthYearAfterMerge($bulan, $tahun);
+            $dataAkunAT = $this->akun->getAkunByMonthYearAT($bulan, $tahun);
+            $dataAkunL = $this->akun->getAkunByMonthYearL($bulan, $tahun);
+            $dataAkunE = $this->akun->getAkunByMonthYearE($bulan, $tahun);
+            $dataAkunM = $this->akun->getAkunByMonthYearM($bulan, $tahun);
+            $dataAkunLR = $this->akun->getAkunByMonthYearLR($bulan, $tahun);
+            $dataAkunPr = $this->akun->getAkunByMonthYearPr($bulan, $tahun);
+            $hasilM = null;
+            $hasilLR = null;
+            $hasilPr = null;
+            $dataM = null;
+            $dataLR = null;
+            $dataPr = null;
+            $saldoM = null;
+            $saldoLR = null;
+            $saldoPr = null;
+            $totalM = null;
+            $totalLR = null;
+            $totalPr = null;
+            $hasil = null;
+            $hasilAT = null;
+            $hasilL = null;
+            // $hasilE = null;
+            $data = null;
+            $dataAT = null;
+            $dataL = null;
+            // $dataE = null;
+            $saldo = null;
+            $saldoAT = null;
+            $saldoL = null;
+            // $saldoE = null;
+            $total = null;
+            $totalAT = null;
+            $totalL = null;
+            // $totalE = null;
+            $s = null;
+
+            foreach ($dataAkunM as $row) {
+                $dataM[] = (array) $this->jurnal->getJurnalByNoReffMonthYearM($row->no_reff, $bulan, $tahun);
+                $saldoM[] = (array) $this->jurnal->getJurnalByNoReffSaldoMonthYearM($row->no_reff, $bulan, $tahun);
+            }
+
+            foreach ($dataAkunLR as $row) {
+                $dataLR[] = (array) $this->jurnal->getJurnalByNoReffMonthYearLR($row->no_reff, $bulan, $tahun);
+                $saldoLR[] = (array) $this->jurnal->getJurnalByNoReffSaldoMonthYearLR($row->no_reff, $bulan, $tahun);
+            }
+
+            foreach ($dataAkunPr as $row) {
+                $dataPr[] = (array) $this->jurnal->getJurnalByNoReffMonthYearPr($row->no_reff, $bulan, $tahun);
+                $saldoPr[] = (array) $this->jurnal->getJurnalByNoReffSaldoMonthYearPr($row->no_reff, $bulan, $tahun);
+            }
+
+            foreach ($dataAkun as $row) {
+                $data[] = (array) $this->jurnal->getJurnalByNoReffMonthYearAfterMerge($row->no_reff, $bulan, $tahun);
+                $saldo[] = (array) $this->jurnal->getJurnalByNoReffSaldoMonthYearAfterMerge($row->no_reff, $bulan, $tahun);
+            }
+            foreach ($dataAkunAT as $row) {
+                $dataAT[] = (array) $this->jurnal->getJurnalByNoReffMonthYearAT($row->no_reff, $bulan, $tahun);
+                $saldoAT[] = (array) $this->jurnal->getJurnalByNoReffSaldoMonthYearAT($row->no_reff, $bulan, $tahun);
+            }
+            foreach ($dataAkunL as $row) {
+                $dataL[] = (array) $this->jurnal->getJurnalByNoReffMonthYearL($row->no_reff, $bulan, $tahun);
+                $saldoL[] = (array) $this->jurnal->getJurnalByNoReffSaldoMonthYearL($row->no_reff, $bulan, $tahun);
+            }
+            // foreach ($dataAkunE as $row) {
+            //     $dataE[] = (array) $this->jurnal->getJurnalByNoReffMonthYearE($row->no_reff, $bulan, $tahun);
+            //     $saldoE[] = (array) $this->jurnal->getJurnalByNoReffSaldoMonthYearE($row->no_reff, $bulan, $tahun);
+            // }
+
+            if ($data == null || $saldo == null) {
+                $this->session->set_flashdata('dataNull', 'Laporan Perubahan Modal Dengan Bulan ' . bulan($bulan) . ' Pada Tahun ' . $tahun . ' Tidak Di Temukan');
+                redirect('laporan_keuangan/posisiKeuangan');
+            }
+
+            $jumlah = count($data);
+            $jumlahAT = count($dataAT);
+            $jumlahL = count($dataL);
+            // $jumlahE = count($dataE);
+            $jumlahM = count($dataM);
+            $jumlahLR = count($dataLR);
+            $jumlahPr = count($dataPr);
+
+            $this->load->view('template', compact('content', 'titleTag', 'data', 'dataAT', 'dataL', 'dataM', 'dataLR', 'dataPr', 'jumlah', 'jumlahAT', 'jumlahL', 'jumlahM', 'jumlahLR', 'jumlahPr', 'saldo', 'saldoAT', 'saldoL', 'saldoM', 'saldoLR', 'saldoPr', 'hasil', 'hasilAT', 'hasilL', 'hasilM', 'hasilLR', 'hasilPr', 'total', 'totalAT', 'totalL', 'totalM', 'totalLR', 'totalPr', 's', 'bulan', 'tahun'));
+        }
     }
 
     // public function laporan()

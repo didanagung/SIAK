@@ -210,6 +210,89 @@ class Akun_model extends CI_Model
         return $query;
     }
 
+    public function getAkunByMonthYearAT($bulan, $tahun)
+    {
+        $query1 = $this->db->select('akun.no_reff,akun.nama_reff,akun.keterangan,transaksi.tgl_transaksi')
+            ->from($this->table)
+            ->where('month(transaksi.tgl_transaksi)', $bulan)
+            ->where('year(transaksi.tgl_transaksi)', $tahun)
+            ->like('akun.no_reff', '12', 'after')
+            ->join('transaksi', 'transaksi.no_reff = akun.no_reff')
+            ->group_by('akun.nama_reff')
+            ->order_by('akun.no_reff')
+            ->get()
+            ->result();
+
+        $query2 = $this->db->select('akun.no_reff,akun.nama_reff,akun.keterangan,penyesuaian.tgl_transaksi')
+            ->from($this->table)
+            ->where('month(penyesuaian.tgl_transaksi)', $bulan)
+            ->where('year(penyesuaian.tgl_transaksi)', $tahun)
+            ->like('akun.no_reff', '12', 'after')
+            ->join('penyesuaian', 'penyesuaian.no_reff = akun.no_reff')
+            ->group_by('akun.nama_reff')
+            ->order_by('akun.no_reff')
+            ->get()
+            ->result();
+
+        $query = array_merge($query1, $query2);
+        return $query;
+    }
+    public function getAkunByMonthYearL($bulan, $tahun)
+    {
+        $query1 = $this->db->select('akun.no_reff,akun.nama_reff,akun.keterangan,transaksi.tgl_transaksi')
+            ->from($this->table)
+            ->where('month(transaksi.tgl_transaksi)', $bulan)
+            ->where('year(transaksi.tgl_transaksi)', $tahun)
+            ->like('akun.no_reff', '21', 'after')
+            ->join('transaksi', 'transaksi.no_reff = akun.no_reff')
+            ->group_by('akun.nama_reff')
+            ->order_by('akun.no_reff')
+            ->get()
+            ->result();
+
+        $query2 = $this->db->select('akun.no_reff,akun.nama_reff,akun.keterangan,penyesuaian.tgl_transaksi')
+            ->from($this->table)
+            ->where('month(penyesuaian.tgl_transaksi)', $bulan)
+            ->where('year(penyesuaian.tgl_transaksi)', $tahun)
+            ->like('akun.no_reff', '21', 'after')
+            ->join('penyesuaian', 'penyesuaian.no_reff = akun.no_reff')
+            ->group_by('akun.nama_reff')
+            ->order_by('akun.no_reff')
+            ->get()
+            ->result();
+
+        $query = array_merge($query1, $query2);
+        return $query;
+    }
+
+    public function getAkunByMonthYearE($bulan, $tahun)
+    {
+        $query1 = $this->db->select('akun.no_reff,akun.nama_reff,akun.keterangan,transaksi.tgl_transaksi')
+            ->from($this->table)
+            ->where('month(transaksi.tgl_transaksi)', $bulan)
+            ->where('year(transaksi.tgl_transaksi)', $tahun)
+            ->like('akun.no_reff', '30', 'after')
+            ->join('transaksi', 'transaksi.no_reff = akun.no_reff')
+            ->group_by('akun.nama_reff')
+            ->order_by('akun.no_reff')
+            ->get()
+            ->result();
+
+        $query2 = $this->db->select('akun.no_reff,akun.nama_reff,akun.keterangan,penyesuaian.tgl_transaksi')
+            ->from($this->table)
+            ->where('month(penyesuaian.tgl_transaksi)', $bulan)
+            ->where('year(penyesuaian.tgl_transaksi)', $tahun)
+            ->like('akun.no_reff', '30', 'after')
+            ->join('penyesuaian', 'penyesuaian.no_reff = akun.no_reff')
+            ->group_by('akun.nama_reff')
+            ->order_by('akun.no_reff')
+            ->get()
+            ->result();
+
+        $query = array_merge($query1, $query2);
+        return $query;
+    }
+
     public function getAkunByMonthYearLRB($bulan, $tahun)
     {
         $query1 = $this->db->select('akun.no_reff,akun.nama_reff,akun.keterangan,transaksi.tgl_transaksi')

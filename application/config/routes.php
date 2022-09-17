@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 /*
 | -------------------------------------------------------------------------
@@ -103,6 +103,8 @@ $route['laporan_keuangan/neraca'] = 'user/laporanKeuanganNeraca';
 $route['laporan_keuangan/neraca/detail'] = 'user/laporanKeuanganNeracaDetail';
 $route['laporan_keuangan/arusKas'] = 'user/laporanKeuanganArusKas';
 $route['laporan_keuangan/arusKas/detail'] = 'user/laporanKeuanganArusKasDetail';
+$route['laporan_keuangan/posisiKeuangan'] = 'user/laporanPosisiKeuangan';
+$route['laporan_keuangan/posisiKeuangan/detail'] = 'user/laporanPosisiKeuanganDetail';
 
 // LAPORAN
 // $route['laporan'] = 'user/laporan';
@@ -111,6 +113,7 @@ $route['laporan/excel/labaRugi'] = 'user/excelLaporanLabaRugi';
 $route['laporan/excel/perubahanModal'] = 'user/excelLaporanPerubahanModal';
 $route['laporan/excel/neraca'] = 'user/excelLaporanNeraca';
 $route['laporan/excel/arusKas'] = 'user/excelLaporanArusKas';
+$route['laporan/excel/posisiKeuangan'] = 'user/laporanPosisiKeuangan';
 
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
