@@ -113,7 +113,7 @@ $route['laporan/excel/labaRugi'] = 'user/excelLaporanLabaRugi';
 $route['laporan/excel/perubahanModal'] = 'user/excelLaporanPerubahanModal';
 $route['laporan/excel/neraca'] = 'user/excelLaporanNeraca';
 $route['laporan/excel/arusKas'] = 'user/excelLaporanArusKas';
-$route['laporan/excel/posisiKeuangan'] = 'user/laporanPosisiKeuangan';
+$route['laporan/excel/posisiKeuangan'] = 'user/excelLaporanPosisiKeuangan';
 
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
