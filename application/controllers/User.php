@@ -43,14 +43,10 @@ class User extends CI_Controller
 
     public function dataAkun()
     {
-        // if ($this->session->userdata('role') != 'direktur') {
-        //     show_404();
-        // } else {
         $content = 'user/data_akun';
         $titleTag = 'Data Akun';
         $dataAkun = $this->akun->getAkun();
         $this->load->view('template', compact('content', 'dataAkun', 'titleTag'));
-        // }
     }
 
     public function isNamaAkunThere($str)
@@ -75,9 +71,6 @@ class User extends CI_Controller
 
     public function createAkun()
     {
-        // if ($this->session->userdata('role') != 'direktur') {
-        //     show_404();
-        // } else {
         $title = 'Tambah';
         $titleTag = 'Data Akun';
         $action = 'data_akun/tambah';
@@ -98,7 +91,6 @@ class User extends CI_Controller
         $this->akun->insertAkun($data);
         $this->session->set_flashdata('berhasil', 'Data Akun Berhasil Di Tambahkan');
         redirect('data_akun');
-        // }
     }
 
     // public function editAkun($no_reff = null)
@@ -680,7 +672,7 @@ class User extends CI_Controller
                             $hasilP = $kreditP - $debitP;
                         }
                     }
-                    $sheet->setCellValue('C' . $x, $hasilP);
+                    $sheet->setCellValue("C$x", $hasilP);
                     $totalP += $hasilP;
                     $debitP = 0;
                     $kreditP = 0;
@@ -689,7 +681,7 @@ class User extends CI_Controller
             }
             $x--;
 
-            $sheet->getStyle('C' . $x)->applyFromArray([
+            $sheet->getStyle("C$x")->applyFromArray([
                 'borders' => [
                     'bottom' => [
                         'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK,
@@ -739,7 +731,7 @@ class User extends CI_Controller
                             $hasilB = $kreditB - $debitB;
                         }
                     }
-                    $sheet->setCellValue('C' . $x, $hasilB);
+                    $sheet->setCellValue("C$x", $hasilB);
                     $totalB += $hasilB;
                     $debitB = 0;
                     $kreditB = 0;
@@ -749,7 +741,7 @@ class User extends CI_Controller
 
             $x--;
 
-            $sheet->getStyle('C' . $x)->applyFromArray([
+            $sheet->getStyle("C$x")->applyFromArray([
                 'borders' => [
                     'bottom' => [
                         'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK,
@@ -1182,11 +1174,11 @@ class User extends CI_Controller
                 }
 
                 if ($hasil >= 0) {
-                    $sheet->setCellValue('C' . $x, $hasil);
+                    $sheet->setCellValue("C$x", $hasil);
                     $sheet->setCellValue('D' . $x, 0);
                     $total_debit += $hasil;
                 } else {
-                    $sheet->setCellValue('C' . $x, 0);
+                    $sheet->setCellValue("C$x", 0);
                     $sheet->setCellValue('D' . $x, $hasil);
                     $total_kredit += $hasil;
                 }
@@ -1278,49 +1270,62 @@ class User extends CI_Controller
         $spreadsheet = new Spreadsheet();
         $spreadsheet->getDefaultStyle()->getFont()->setName('Times New Roman')->setSize(12);
         $sheet = $spreadsheet->getActiveSheet();
-        $sheet->getColumnDimension('A')->setWidth(15);
-        $sheet->getColumnDimension('B')->setWidth(20);
+        $sheet->getColumnDimension('A')->setWidth(25);
+        $sheet->getColumnDimension('B')->setWidth(15);
         $sheet->getColumnDimension('C')->setWidth(8);
         $sheet->getColumnDimension('D')->setWidth(12);
         $sheet->getColumnDimension('E')->setWidth(12);
-        // $sheet->getStyle('C:D')->getNumberFormat('Accounting');
 
-        $sheet->setCellValue('A1', 'Laporan Arus Kas Bulan ' . bulan($bulan) . ' Tahun ' . $tahun);
+        $sheet->setCellValue('A1', 'PT. Mitra Sejati Konsultan');
+        $sheet->setCellValue('A2', 'Laporan Posisi Keuangan');
+        $sheet->setCellValue('A3', 'Per ' . bulan($bulan) . " Tahun $tahun");
         $sheet->mergeCells('A1:E1');
-        $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
-        $sheet->getStyle('A1')->applyFromArray([
+        $sheet->mergeCells('A2:E2');
+        $sheet->mergeCells('A3:E3');
+        $sheet->getStyle('A1:E3')->getAlignment()->setHorizontal('center');
+        $sheet->getStyle('A1:E3')->applyFromArray([
             'font' => [
                 'bold' => true,
-                'size' => 16
+                'size' => 14
             ]
         ]);
 
-        $sheet->setCellValue('A3', 'TANGGAL');
-        $sheet->setCellValue('B3', 'NAMA AKUN');
-        $sheet->setCellValue('C3', 'REF');
-        $sheet->setCellValue('D3', 'DEBET');
-        $sheet->setCellValue('E3', 'KREDIT');
-        $sheet->getStyle('A3:E3')->applyFromArray([
+        $sheet->setCellValue('A4', 'TANGGAL');
+        $sheet->setCellValue('B4', 'NAMA AKUN');
+        $sheet->setCellValue('C4', 'REF');
+        $sheet->setCellValue('D4', 'DEBET');
+        $sheet->setCellValue('E4', 'KREDIT');
+        $sheet->getStyle('A4:E4')->applyFromArray([
             'font' => ['bold' => true]
         ]);
 
-        // $jumlahP = count($dataP);
+        $x = 5;
 
-        for ($i = 0; $i < $jumlah; $i++) {
-            // $s=0;
-            // $deb = $saldoB[$i];
-            // $sheet->setCellValue('A'.$x, $dataB[$i][$s]->nama_reff);
-            // for($j=0;$j<count($dataB[$i]);$j++) {
-            //     $kreditB = $kreditB + $deb[$j]->saldo;
-            //     $hasilB = $kreditB-$debitB;
-            // }
-            // $sheet->setCellValue('C'.$x, $hasilB);
-            // $totalB += $hasilB;
-            // $debitB = 0;
-            // $kreditB = 0;
-            // $x++;
+        foreach ($jurnals as $row) {
+            $sheet->setCellValue("A$x", date_indo($row->tgl_transaksi));
+            $sheet->setCellValue("B$x", $row->nama_reff);
+            $sheet->setCellValue("C$x", $row->no_reff);
+            if ($row->jenis_saldo == 'kredit') {
+                $sheet->setCellValue("D$x", 0);
+                $sheet->setCellValue("E$x", $row->saldo);
+            } else {
+                $sheet->setCellValue("D$x", $row->saldo);
+                $sheet->setCellValue("E$x", 0);
+            }
+            $x++;
         }
 
+        $sheet->setCellValue("A$x", 'Jumlah Total');
+        $sheet->mergeCells("A$x:C$x");
+        $sheet->getStyle("A$x:C$x")->getAlignment()->setHorizontal('center');
+        $sheet->getStyle("A$x:C$x")->applyFromArray([
+            'font' => [
+                'bold' => true,
+                'size' => 14
+            ]
+        ]);
+        $sheet->setCellValue("D$x", $totalDebit->saldo);
+        $sheet->setCellValue("E$x", $totalKredit->saldo);
 
         $writer = new Xlsx($spreadsheet);
         $filename = 'Laporan Arus Kas ' . bulan($bulan) . ' ' . $tahun;
@@ -1445,14 +1450,12 @@ class User extends CI_Controller
             redirect('laporan_keuangan/neraca');
         }
 
-        $dataAkun = $this->akun->getAkunByMonthYearAfterMerge($bulan, $tahun);
+        $dataAkunAL = $this->akun->getAkunByMonthYearAL($bulan, $tahun);
         $dataAkunAT = $this->akun->getAkunByMonthYearAT($bulan, $tahun);
         $dataAkunL = $this->akun->getAkunByMonthYearL($bulan, $tahun);
         $dataAkunM = $this->akun->getAkunByMonthYearM($bulan, $tahun);
         $dataAkunLR = $this->akun->getAkunByMonthYearLR($bulan, $tahun);
         $dataAkunPr = $this->akun->getAkunByMonthYearPr($bulan, $tahun);
-        $data = null;
-        $saldo = null;
 
         foreach ($dataAkunM as $row) {
             $dataM[] = (array) $this->jurnal->getJurnalByNoReffMonthYearM($row->no_reff, $bulan, $tahun);
@@ -1469,9 +1472,9 @@ class User extends CI_Controller
             $saldoPr[] = (array) $this->jurnal->getJurnalByNoReffSaldoMonthYearPr($row->no_reff, $bulan, $tahun);
         }
 
-        foreach ($dataAkun as $row) {
-            $data[] = (array) $this->jurnal->getJurnalByNoReffMonthYearAfterMerge($row->no_reff, $bulan, $tahun);
-            $saldo[] = (array) $this->jurnal->getJurnalByNoReffSaldoMonthYearAfterMerge($row->no_reff, $bulan, $tahun);
+        foreach ($dataAkunAL as $row) {
+            $dataAL[] = (array) $this->jurnal->getJurnalByNoReffMonthYearAL($row->no_reff, $bulan, $tahun);
+            $saldoAL[] = (array) $this->jurnal->getJurnalByNoReffSaldoMonthYearAL($row->no_reff, $bulan, $tahun);
         }
         foreach ($dataAkunAT as $row) {
             $dataAT[] = (array) $this->jurnal->getJurnalByNoReffMonthYearAT($row->no_reff, $bulan, $tahun);
@@ -1483,7 +1486,7 @@ class User extends CI_Controller
         }
 
 
-        $jumlah = count($data);
+        $jumlahAL = count($dataAL);
         $jumlahAT = count($dataAT);
         $jumlahL = count($dataL);
         $jumlahM = count($dataM);
@@ -1517,7 +1520,9 @@ class User extends CI_Controller
         $sheet->mergeCells('A1:B1');
         $sheet->mergeCells('D1:E1');
         $sheet->setCellValue('A4', 'ASSET');
+        $sheet->setCellValue('A5', 'Asset Lancar');
         $sheet->setCellValue('D4', 'LIABILITAS');
+        $sheet->setCellValue('D5', 'Liabilitas');
         $sheet->getStyle('A4:F4')->applyFromArray([
             'font' => ['bold' => true]
         ]);
@@ -1529,39 +1534,76 @@ class User extends CI_Controller
         $kredit = 0;
         $total_debit = 0;
         $total_kredit = 0;
-        $debNs = [];
+        $debAL = [];
+        $debLR = [];
 
-        for ($i = 0; $i < $jumlah; $i++) {
+        for ($i = 0; $i < $jumlahLR; $i++) {
             $a++;
             $s = 0;
-            $debNs = $saldo[$i];
-            for ($k = 0; $k < $jumlah; $k++) {
+            $debLR = $saldoLR[$i];
+            for ($k = 0; $k < $jumlahLR; $k++) {
                 if ($j != $k) {
-                    if ($debNs == $saldo[$k]) {
-                        $saldo[$k] = "";
+                    if ($debLR == $saldoLR[$k]) {
+                        $saldoLR[$k] = "";
                     }
                 }
             }
-            if ($debNs != "") {
-                if (preg_match("/^11/", $data[$i][$s]->no_reff)) {
-                    $sheet->setCellValue("B$x", $data[$i][$s]->nama_reff);
-                    for ($j = 0; $j < count($data[$i]); $j++) {
-                        if ($debNs[$j] != "") {
-                            if ($debNs[$j]->jenis_saldo == "debit") {
-                                $debit = $debit + $debNs[$j]->saldo;
-                            } else {
-                                $kredit = $kredit + $debNs[$j]->saldo;
-                            }
-                            $hasil = $debit - $kredit;
+            if ($debLR != "") {
+                for ($j = 0; $j < count($dataLR[$i]); $j++) {
+                    if ($debLR[$j] != "") {
+                        if ($debLR[$j]->jenis_saldo == "debit") {
+                            $debit = $debit + $debLR[$j]->saldo;
+                        } else {
+                            $kredit = $kredit + $debLR[$j]->saldo;
                         }
+                        $hasil = $debit - $kredit;
                     }
-                    if ($hasil >= 0) {
-                        $sheet->setCellValue('C' . $x, $hasil);
-                        $total_debit += $hasil;
-                    } else {
-                        $sheet->setCellValue('C' . $x, $hasil);
-                        $total_kredit += $hasil;
+                }
+                if ($hasil >= 0) {
+                    $total_debit += $hasil;
+                } else {
+                    $total_kredit += $hasil;
+                }
+                $debit = 0;
+                $kredit = 0;
+            }
+        }
+        $totalLR = $total_debit + $total_kredit;
+
+        $debit = 0;
+        $kredit = 0;
+        $total_debit = 0;
+        $total_kredit = 0;
+
+        for ($i = 0; $i < $jumlahAL; $i++) {
+            $a++;
+            $s = 0;
+            $debAL = $saldoAL[$i];
+            for ($k = 0; $k < $jumlahAL; $k++) {
+                if ($j != $k) {
+                    if ($debAL == $saldoAL[$k]) {
+                        $saldoAL[$k] = "";
                     }
+                }
+            }
+            if ($debAL != "") {
+                $sheet->setCellValue("B$x", $dataAL[$i][$s]->nama_reff);
+                for ($j = 0; $j < count($dataAL[$i]); $j++) {
+                    if ($debAL[$j] != "") {
+                        if ($debAL[$j]->jenis_saldo == "debit") {
+                            $debit = $debit + $debAL[$j]->saldo;
+                        } else {
+                            $kredit = $kredit + $debAL[$j]->saldo;
+                        }
+                        $hasil = $debit - $kredit;
+                    }
+                }
+                if ($hasil >= 0) {
+                    $sheet->setCellValue("C$x", $hasil);
+                    $total_debit += $hasil;
+                } else {
+                    $sheet->setCellValue("C$x", $hasil);
+                    $total_kredit += $hasil;
                 }
                 $debit = 0;
                 $kredit = 0;
@@ -1569,12 +1611,229 @@ class User extends CI_Controller
             }
         }
 
-        $sheet->setCellValue("A$x", 'Total');
+        $totalAL = $total_debit + $total_kredit;
+        $sheet->setCellValue("A$x", 'Total Asset Lancar');
         $sheet->mergeCells("A$x:B$x");
-        $sheet->setCellValue("C$x", $total_debit);
-        $sheet->setCellValue("D$x", $total_kredit);
-        $sheet->getStyle("A$x:D$x")->getAlignment()->setHorizontal('center');
-        $sheet->getStyle("A$x:D$x")->applyFromArray([
+        $sheet->setCellValue("C$x", $totalAL);
+        $sheet->getStyle("A$x:C$x")->applyFromArray([
+            'font' => [
+                'bold' => true,
+            ]
+        ]);
+        $x++;
+        $sheet->setCellValue("A$x", 'Asset Tetap');
+        $x++;
+
+        $total_debit = 0;
+        $total_kredit = 0;
+        $debAT = [];
+
+        for ($i = 0; $i < $jumlahAT; $i++) {
+            $a++;
+            $s = 0;
+            $debAT = $saldoAT[$i];
+            for ($k = 0; $k < $jumlahAT; $k++) {
+                if ($j != $k) {
+                    if ($debAT == $saldoAT[$k]) {
+                        $saldoAT[$k] = "";
+                    }
+                }
+            }
+            if ($debAT != "") {
+                $sheet->setCellValue("B$x", $dataAT[$i][$s]->nama_reff);
+                for ($j = 0; $j < count($dataAT[$i]); $j++) {
+                    if ($debAT[$j] != "") {
+                        if ($debAT[$j]->jenis_saldo == "debit") {
+                            $debit = $debit + $debAT[$j]->saldo;
+                        } else {
+                            $kredit = $kredit + $debAT[$j]->saldo;
+                        }
+                        $hasil = $debit - $kredit;
+                    }
+                }
+                if ($hasil >= 0) {
+                    $sheet->setCellValue("C$x", $hasil);
+                    $total_debit += $hasil;
+                } else {
+                    $sheet->setCellValue("C$x", $hasil);
+                    $total_kredit += $hasil;
+                }
+                $debit = 0;
+                $kredit = 0;
+                $x++;
+            }
+        }
+
+        $totalAT = $total_debit + $total_kredit;
+        $sheet->setCellValue("A$x", 'Total Asset Tetap');
+        $sheet->mergeCells("A$x:B$x");
+        $sheet->setCellValue("C$x", $totalAT);
+        $sheet->getStyle("A$x:C$x")->applyFromArray([
+            'font' => [
+                'bold' => true,
+            ]
+        ]);
+        $x++;
+        $sheet->setCellValue("A$x", 'TOTAL ASSET');
+        $sheet->mergeCells("A$x:B$x");
+        $sheet->setCellValue("C$x", $totalAL + $totalAT);
+        $sheet->getStyle("A$x:C$x")->applyFromArray([
+            'font' => [
+                'bold' => true,
+            ]
+        ]);
+
+        $x = 6;
+
+        $total_debit = 0;
+        $total_kredit = 0;
+        $debL = [];
+
+        for ($i = 0; $i < $jumlahL; $i++) {
+            $a++;
+            $s = 0;
+            $debL = $saldoL[$i];
+            for ($k = 0; $k < $jumlahL; $k++) {
+                if ($j != $k) {
+                    if ($debL == $saldoL[$k]) {
+                        $saldoL[$k] = "";
+                    }
+                }
+            }
+            if ($debL != "") {
+                $sheet->setCellValue("E$x", $dataL[$i][$s]->nama_reff);
+                for ($j = 0; $j < count($dataL[$i]); $j++) {
+                    if ($debL[$j] != "") {
+                        if ($debL[$j]->jenis_saldo == "debit") {
+                            $debit = $debit + $debL[$j]->saldo;
+                        } else {
+                            $kredit = $kredit + $debL[$j]->saldo;
+                        }
+                        $hasil = $debit - $kredit;
+                    }
+                }
+                if ($hasil >= 0) {
+                    $sheet->setCellValue("F$x", $hasil);
+                    $total_debit += $hasil;
+                } else {
+                    $sheet->setCellValue("F$x", abs($hasil));
+                    $total_kredit += $hasil;
+                }
+                $debit = 0;
+                $kredit = 0;
+                $x++;
+            }
+        }
+
+        $totalL = $total_debit + $total_kredit;
+        $sheet->setCellValue("D$x", 'Total Liabilitas');
+        $sheet->mergeCells("D$x:E$x");
+        $sheet->setCellValue("F$x", abs($totalL));
+        $sheet->getStyle("D$x:E$x")->applyFromArray([
+            'font' => [
+                'bold' => true,
+            ]
+        ]);
+        $x++;
+        $sheet->setCellValue("D$x", 'Equitas');
+        $x++;
+
+        $total_debit = 0;
+        $total_kredit = 0;
+        $debM = [];
+        $debPr = [];
+
+        for ($i = 0; $i < $jumlahM; $i++) {
+            $a++;
+            $s = 0;
+            $debM = $saldoM[$i];
+            for ($k = 0; $k < $jumlahM; $k++) {
+                if ($j != $k) {
+                    if ($debM == $saldoM[$k]) {
+                        $saldoM[$k] = "";
+                    }
+                }
+            }
+            if ($debM != "") {
+                for ($j = 0; $j < count($dataM[$i]); $j++) {
+                    if ($debM[$j] != "") {
+                        if ($debM[$j]->jenis_saldo == "debit") {
+                            $debit = $debit + $debM[$j]->saldo;
+                        } else {
+                            $kredit = $kredit + $debM[$j]->saldo;
+                        }
+                        $hasil = $debit - $kredit;
+                    }
+                }
+                if ($hasil >= 0) {
+                    $total_debit += $hasil;
+                } else {
+                    $total_kredit += $hasil;
+                }
+                $debit = 0;
+                $kredit = 0;
+            }
+        }
+        $totalM = $total_debit + $total_kredit;
+
+
+        $debit = 0;
+        $kredit = 0;
+        $total_debit = 0;
+        $total_kredit = 0;
+
+        for ($i = 0; $i < $jumlahPr; $i++) {
+            $a++;
+            $s = 0;
+            $debPr = $saldoPr[$i];
+            for ($k = 0; $k < $jumlahPr; $k++) {
+                if ($j != $k) {
+                    if ($debPr == $saldoPr[$k]) {
+                        $saldoPr[$k] = "";
+                    }
+                }
+            }
+            if ($debPr != "") {
+                for ($j = 0; $j < count($dataPr[$i]); $j++) {
+                    if ($debPr[$j] != "") {
+                        if ($debPr[$j]->jenis_saldo == "debit") {
+                            $debit = $debit + $debPr[$j]->saldo;
+                        } else {
+                            $kredit = $kredit + $debPr[$j]->saldo;
+                        }
+                        $hasil = $debit - $kredit;
+                    }
+                }
+                if ($hasil >= 0) {
+                    $total_debit += $hasil;
+                } else {
+                    $total_kredit += $hasil;
+                }
+                $debit = 0;
+                $kredit = 0;
+            }
+        }
+        $totalPr = $total_debit + $total_kredit;
+
+        $totalEquitas = $totalM + $totalLR + $totalPr;
+
+        $sheet->setCellValue("E$x", 'Modal');
+        $sheet->setCellValue("F$x", abs($totalEquitas));
+        $x++;
+        $sheet->setCellValue("D$x", 'Total Equitas');
+        $sheet->setCellValue("F$x", abs($totalEquitas));
+        $sheet->getStyle("D$x:F$x")->applyFromArray([
+            'font' => [
+                'bold' => true,
+            ]
+        ]);
+
+        $x++;
+
+        $sheet->setCellValue("D$x", 'TOTAL LIABILITAS + EQUITAS');
+        $sheet->mergeCells("D$x:E$x");
+        $sheet->setCellValue("F$x", abs($totalL + $totalEquitas));
+        $sheet->getStyle("D$x:F$x")->applyFromArray([
             'font' => [
                 'bold' => true,
             ]

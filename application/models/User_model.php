@@ -1,52 +1,116 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
-class User_model extends CI_Model{
+class User_model extends CI_Model
+{
     private $table = 'user';
 
-    public function getDefaultValuesLogin(){
+    public function getDefaultValuesLogin()
+    {
         return [
-            'username'=>'',
-            'password'=>'',
+            'username' => '',
+            'password' => '',
         ];
     }
 
-    public function getValidationRulesLogin(){
+    public function getDefaultValuesRegister()
+    {
+        return [
+            'nama' => '',
+            'role' => 'bendahara',
+            'jk' => '',
+            'alamat' => '',
+            'email' => '',
+            'username' => '',
+            'password' => '',
+        ];
+    }
+
+    public function getValidationRulesLogin()
+    {
         return [
             [
-                'field'=>'username',
-                'label'=>'Username',
-                'rules'=>'trim|required'
+                'field' => 'username',
+                'label' => 'Username',
+                'rules' => 'trim|required'
             ],
             [
-                'field'=>'password',
-                'label'=>'Password',
-                'rules'=>'trim|required'
+                'field' => 'password',
+                'label' => 'Password',
+                'rules' => 'trim|required'
             ]
         ];
     }
 
-    public function validateLogin(){
+    public function getValidationRulesRegister()
+    {
+        return [
+            [
+                'field' => 'nama',
+                'label' => 'Nama',
+                'rules' => 'trim|required'
+            ],
+            [
+                'field' => 'role',
+                'label' => 'Role',
+                'rules' => 'trim|required'
+            ],
+            [
+                'field' => 'jk',
+                'label' => 'Jenis Kelamin',
+                'rules' => 'trim|required'
+            ],
+            [
+                'field' => 'alamat',
+                'label' => 'Alamat',
+                'rules' => 'trim|required'
+            ],
+            [
+                'field' => 'email',
+                'label' => 'Email',
+                'rules' => 'trim|required'
+            ],
+            [
+                'field' => 'username',
+                'label' => 'Username',
+                'rules' => 'trim|required|uniq'
+            ],
+            [
+                'field' => 'password',
+                'label' => 'Password',
+                'rules' => 'trim|required'
+            ],
+        ];
+    }
+
+    public function insertUser($data)
+    {
+        return $this->db->insert($this->table, $data);
+    }
+
+    public function validateLogin()
+    {
         $rules = $this->getValidationRulesLogin();
         $this->form_validation->set_rules($rules);
         return $this->form_validation->run();
     }
 
-    public function run($data){
+    public function run($data)
+    {
         $username = $data->username;
         $password = md5(sha1(md5($data->password)));
 
-        $user = $this->db->where('username',$username)
-                             ->where('password',$password)
-                             ->get($this->table)
-                             ->row();
-        
-        if(count($user)){
+        $user = $this->db->where('username', $username)
+            ->where('password', $password)
+            ->get($this->table)
+            ->row();
+
+        if (count($user)) {
             $sessionData = [
-                'login'=>true,
-                'username'=>$user->nama,
-                'id'=>$user->id_user,
-                'role'=>$user->role
+                'login' => true,
+                'username' => $user->nama,
+                'id' => $user->id_user,
+                'role' => $user->role
             ];
             $this->session->set_userdata($sessionData);
             return true;
@@ -55,14 +119,15 @@ class User_model extends CI_Model{
         return false;
     }
 
-    public function logout(){
-        $sessionData = ['login','username','id','role'];
+    public function logout()
+    {
+        $sessionData = ['login', 'username', 'id', 'role'];
         $this->session->unset_userdata($sessionData);
         $this->session->sess_destroy();
     }
 
-    public function updateUser($id,$data){
-        return $this->db->where('id_user',$id)->update($this->table,$data);
+    public function updateUser($id, $data)
+    {
+        return $this->db->where('id_user', $id)->update($this->table, $data);
     }
 }
-?>

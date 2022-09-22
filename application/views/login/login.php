@@ -63,9 +63,12 @@
                   </label>
                 </div>
                 <div class="text-center">
-                  <button type="submit" class="btn btn-primary my-4">Sign in</button>
+                  <button type="submit" class="btn btn-primary mt-4">Sign in</button>
                 </div>
               </form>
+              <div class="text-center">
+                <p>Belum punya akun? <a href="<?= base_url('register') ?>" class="mt-2">Register</a></p>
+              </div>
             </div>
           </div>
         </div>
