@@ -5,7 +5,9 @@ SIA atau Sistem Informasi Akuntansi yaitu aplikasi berbasis web yang mempunyai f
 <hr>
 <h3>Cara Install</h3>
 <ul>
-<li>jalan perintah pada prompt atau terminal composer install</li>
+<li>Pastika perangkat anda sudah terinstall composer dan local host (disini saya menggunakan XAMPP)</li>
+<li>jalankan perintah pada prompt atau terminal <b>composer install</b></li>
+<li>jalankan perintah <b>composer require phpoffice/phpspreadsheet</b> untuk menjalankan fitur laporannya</li>
 <li>buat database siak, kemudian import database yang ada pada folder database</li>
 </ul>
 <hr>
