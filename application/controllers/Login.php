@@ -19,9 +19,6 @@ class Login extends CI_Controller
             $data = (object) $this->input->post(null, true);
         }
 
-        // var_dump($data);
-        // die;
-
         if (!$this->user->validateLogin()) {
             $this->load->view('login/login', compact('data'));
             return;
@@ -40,30 +37,23 @@ class Login extends CI_Controller
 
     public function register()
     {
-        $titleTag = 'REGISTER';
-        $action = 'login/register';
-        $content = 'login/register';
-        $this->load->view($content, compact('titleTag'));
-
-        $title = 'Tambah';
-        $titleTag = 'Data Akun';
-        $action = 'data_akun/tambah';
-        $content = 'user/form_akun';
-
         if (!$_POST) {
-            $data = (object) $this->akun->getDefaultValues();
+            $data = (object) $this->user->getDefaultValuesRegister();
         } else {
             $data = (object) $this->input->post(null, true);
-            $data->id_user = $this->session->userdata('id');
         }
 
-        if (!$this->akun->validate()) {
-            $this->load->view('template', compact('content', 'title', 'action', 'data', 'titleTag'));
+        if (!$this->user->validateRegister()) {
+            $this->load->view('login/register', compact('data'));
             return;
         }
 
-        $this->akun->insertAkun($data);
-        $this->session->set_flashdata('berhasil', 'Data Akun Berhasil Di Tambahkan');
-        redirect('data_akun');
+        if (!$this->user->insertUser($data)) {
+            $this->session->set_flashdata('pesan_error', 'Data Harus Lengkap');
+            redirect('register');
+        } else {
+            $this->session->set_flashdata('berhasil', 'Anda Berhasil Register');
+            redirect('login');
+        }
     }
 }

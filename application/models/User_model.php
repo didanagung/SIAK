@@ -17,7 +17,7 @@ class User_model extends CI_Model
     {
         return [
             'nama' => '',
-            'role' => 'bendahara',
+            'role' => '',
             'jk' => '',
             'alamat' => '',
             'email' => '',
@@ -73,7 +73,7 @@ class User_model extends CI_Model
             [
                 'field' => 'username',
                 'label' => 'Username',
-                'rules' => 'trim|required|uniq'
+                'rules' => 'trim|required|is_unique[user.username]'
             ],
             [
                 'field' => 'password',
@@ -85,12 +85,37 @@ class User_model extends CI_Model
 
     public function insertUser($data)
     {
-        return $this->db->insert($this->table, $data);
+        $nama = $data->nama;
+        $username = $data->username;
+        $role = $data->role;
+        $jk = $data->jk;
+        $alamat = $data->alamat;
+        $email = $data->email;
+        $password = md5(sha1(md5($data->password)));
+        $datas = array(
+            'nama' => $nama,
+            'username' => $username,
+            'role' => $role,
+            'jk' => $jk,
+            'alamat' => $alamat,
+            'email' => $email,
+            'password' => $password,
+        );
+        $this->db->insert($this->table, $datas);
+        return true;
     }
 
     public function validateLogin()
     {
         $rules = $this->getValidationRulesLogin();
+        $this->form_validation->set_rules($rules);
+        return $this->form_validation->run();
+    }
+
+
+    public function validateRegister()
+    {
+        $rules = $this->getValidationRulesRegister();
         $this->form_validation->set_rules($rules);
         return $this->form_validation->run();
     }

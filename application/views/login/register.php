@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="Start your development with a Dashboard for Bootstrap 4.">
     <meta name="author" content="Creative Tim">
-    <title>SIA | Login</title>
+    <title>SIA | Register</title>
     <!-- Favicon -->
     <link href="<?= base_url('assets/img/brand/logo.jpeg') ?>" rel="icon" type="image/jpeg">
     <!-- Fonts -->
@@ -37,7 +37,7 @@
 
                         <div class="card-body px-lg-5 py-lg-5">
                             <div class="text-center text-muted mb-4">
-                                <h1 class="my-5" style="font-family: 'Bungee Shade';font-size:40px;"><?= $titleTag; ?></h1>
+                                <h1 class="my-5" style="font-family: 'Bungee Shade';font-size:40px;">REGISTER</h1>
                             </div>
                             <form role="form" action="<?= base_url('register') ?>" method="post">
                                 <div class="form-group mb-3">
@@ -48,6 +48,11 @@
                                 <div class="form-group mb-3">
                                     <div class="input-group input-group-alternative">
                                         <input class="form-control" placeholder="Username" type="text" name="username">
+                                    </div>
+                                </div>
+                                <div class="form-group mb-3" hidden>
+                                    <div class="input-group input-group-alternative">
+                                        <input class="form-control" type="text" name="role" value="bendahara">
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -70,15 +75,13 @@
                                         <input class="form-control" placeholder="Password" type="password" name="password">
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <div class="input-group input-group-alternative">
-                                        <input class="form-control" placeholder="Konfirmasi Password" type="password" name="k_password">
-                                    </div>
-                                </div>
                                 <div class="text-center">
                                     <button type="submit" class="btn btn-primary mt-4">Register</button>
                                 </div>
                             </form>
+                            <div class="text-center mt-2">
+                                <p class="text-sm">Sudah Punya Akun? <a href="<?= base_url('login') ?>">&laquo Login</a></p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -95,14 +98,19 @@
     <script src="<?= base_url('assets/vendor/sweetalert/sweetalert2.all.min.js') ?>"></script>
 
     <?php
+    $formErrorNama = form_error('nama');
     $formErrorUsername = form_error('username');
+    $formErrorJk = form_error('jk');
+    $formErrorAlamat = form_error('alamat');
+    $formErrorEmail = form_error('email');
     $formErrorPassword = form_error('password');
-    if (!empty($formErrorUsername) || !empty($formErrorPassword)) :
+
+    if (!empty($formErrorNama) || !empty($formErrorUsername) || !empty($formErrorJk) || !empty($formErrorAlamat) || !empty($formErrorEmail) || !empty($formErrorPassword)) :
     ?>
         <!-- SCRIPT SWEETALERT INLINE -->
         <script>
             $(window).on('load', function() {
-                let pesan = "<?= $formErrorUsername ?> \n <?= $formErrorPassword ?>";
+                let pesan = "Data Tidak Lengkap atau Username Sudah dipakai";
                 swal('Oops!', pesan, 'error');
             });
         </script>

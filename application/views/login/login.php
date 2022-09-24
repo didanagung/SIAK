@@ -66,8 +66,8 @@
                   <button type="submit" class="btn btn-primary mt-4">Sign in</button>
                 </div>
               </form>
-              <div class="text-center">
-                <p>Belum punya akun? <a href="<?= base_url('register') ?>" class="mt-2">Register</a></p>
+              <div class="text-center mt-2">
+                <p class="text-sm">Belum punya akun? <a href="<?= base_url('register') ?>">Register &raquo</a></p>
               </div>
             </div>
           </div>

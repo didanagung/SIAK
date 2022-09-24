@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 09, 2022 at 07:51 PM
+-- Generation Time: Sep 24, 2022 at 06:36 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 7.4.29
 
@@ -115,7 +115,9 @@ INSERT INTO `penyesuaian` (`id_transaksi`, `id_user`, `no_reff`, `tgl_input`, `t
 (45, 1, 511, '2022-09-10 00:04:42', '2022-09-30', 'debit', 475000),
 (46, 1, 212, '2022-09-10 00:05:03', '2022-09-30', 'kredit', 475000),
 (47, 1, 201, '2022-09-10 00:05:21', '2022-09-30', 'debit', 1000000),
-(48, 1, 411, '2022-09-10 00:05:39', '2022-09-30', 'kredit', 1000000);
+(48, 1, 411, '2022-09-10 00:05:39', '2022-09-30', 'kredit', 1000000),
+(49, 1, 141, '2022-09-11 00:18:07', '2022-08-31', 'debit', 300),
+(50, 1, 142, '2022-09-11 00:19:30', '2022-08-11', 'kredit', 300);
 
 -- --------------------------------------------------------
 
@@ -160,7 +162,10 @@ INSERT INTO `transaksi` (`id_transaksi`, `id_user`, `no_reff`, `tgl_input`, `tgl
 (119, 1, 516, '2022-09-10 00:00:24', '2022-09-25', 'debit', 2260000),
 (120, 1, 111, '2022-09-10 00:00:46', '2022-09-25', 'kredit', 2260000),
 (121, 1, 511, '2022-09-10 00:01:25', '2022-09-27', 'debit', 38210000),
-(122, 1, 111, '2022-09-10 00:01:43', '2022-09-27', 'kredit', 38210000);
+(122, 1, 111, '2022-09-10 00:01:43', '2022-09-27', 'kredit', 38210000),
+(123, 1, 121, '2022-09-10 21:07:06', '2022-08-03', 'debit', 30000),
+(124, 1, 141, '2022-09-10 21:07:23', '2022-08-05', 'kredit', 40000),
+(125, 1, 124, '2022-09-10 21:08:18', '2022-08-09', 'debit', 10000);
 
 -- --------------------------------------------------------
 
@@ -185,8 +190,9 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`id_user`, `nama`, `role`, `jk`, `alamat`, `email`, `username`, `password`, `last_login`) VALUES
-(1, 'Ridha', 'direktur', 'perempuan', 'JL.H.B Jassin No.337', 'hidayatchandra08@gmail.com', 'ridha', '69005bb62e9622ee1de61958aacf0f63', '2022-09-10 00:48:45'),
-(2, 'Dudi', 'bendahara', 'laki-laki', 'Cikahuripan', 'erostea@gmail.com', 'dudi', '69005bb62e9622ee1de61958aacf0f63', '2022-09-05 22:45:06');
+(1, 'Ridha', 'direktur', 'perempuan', 'JL.H.B Jassin No.337', 'hidayatchandra08@gmail.com', 'ridha', '69005bb62e9622ee1de61958aacf0f63', '2022-09-24 23:01:44'),
+(2, 'Dudi', 'bendahara', 'laki-laki', 'Cikahuripan', 'erostea@gmail.com', 'dudi', '69005bb62e9622ee1de61958aacf0f63', '2022-09-05 22:45:06'),
+(74, 'coba', 'bendahara', '', 'Ciluluk', 'didanagungs@gmail.com', 'coba', 'ec8c70de37da54ee9d4e74c5e9103c18', '2022-09-25 00:34:56');
 
 --
 -- Indexes for dumped tables
@@ -229,19 +235,19 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `penyesuaian`
 --
 ALTER TABLE `penyesuaian`
-  MODIFY `id_transaksi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
+  MODIFY `id_transaksi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
 
 --
 -- AUTO_INCREMENT for table `transaksi`
 --
 ALTER TABLE `transaksi`
-  MODIFY `id_transaksi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=123;
+  MODIFY `id_transaksi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=127;
 
 --
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=75;
 
 --
 -- Constraints for dumped tables
